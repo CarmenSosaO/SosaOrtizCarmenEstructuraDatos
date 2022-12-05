@@ -33,6 +33,9 @@ public class StackExample {
                 case '(':
                     parenthesis.add(ch);
                     break;
+                case ')':
+                    parenthesis.add(ch);
+                    break;
                 case '+':
                 case '*':
                 case '/':
