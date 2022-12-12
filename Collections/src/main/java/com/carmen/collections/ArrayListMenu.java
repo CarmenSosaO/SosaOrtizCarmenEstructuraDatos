@@ -18,9 +18,8 @@ public class ArrayListMenu {
     static final String INVALID_INDEX_ERROR_MESSAGE = "El valor ingresado esta fuera del rango del índice";
     static final String INVALID_ITEM_ERROR_MESSAGE = "Solo se aceptan valores enteros";
     static ArrayList items = new ArrayList();
-    static Scanner scanner = new Scanner(System.in);
     
-    public static void main(String[] args) {   
+    public static void main(String[] args) {
         System.out.println("Métodos de Array List");
         do {
             System.out.println("1. Agregar");
@@ -28,28 +27,24 @@ public class ArrayListMenu {
             System.out.println("3. Mostrar");
             System.out.println("4. Salir");
             System.out.print("Ingrese opción: ");
-            readOption();
-            System.out.flush();
+            int option = scanOption();
+            switch (option) {
+                case 1:
+                    add();
+                    break;
+                case 2:
+                    delete();
+                    break;
+                case 3:
+                    show();
+                    break;
+                case 4:
+                    exit();
+                    break;
+                default:
+                    System.out.println(INCORRECT_OPTION_MESSAGE);
+            }
         } while(true);
-    }
-
-    private static void readOption() {
-        int option = scannOption();
-        switch (option) {
-            case 1:
-                add();
-                break;
-            case 2:
-                delete();
-                break;
-            case 3:
-                show();
-                break;
-            case 4:
-                exit();
-            default:
-                System.out.println(INCORRECT_OPTION_MESSAGE);
-        }
     }
 
     private static void exit() {
@@ -74,15 +69,21 @@ public class ArrayListMenu {
             System.out.println("3 Eliminar todo");
             System.out.println("4 Cancelar");
             System.out.println("Elijar opción");
-            option = scannOption();
+            option = scanOption();
             switch (option) {
-                case 1 -> removeObject();
-                case 2 -> removeByIndex();
-                case 3 -> removeAll();
-                case 4 -> {
+                case 1:
+                    removeObject();
+                    break;
+                case 2:
+                    removeByIndex();
+                    break;
+                case 3:
+                    removeAll();
+                    break;
+                case 4:
                     return;
-                }
-                default -> System.out.println(INCORRECT_OPTION_MESSAGE);
+                default:
+                    System.out.println(INCORRECT_OPTION_MESSAGE);
             }
             System.out.flush();
         } while (true);
@@ -93,7 +94,7 @@ public class ArrayListMenu {
         Object itemRead = readItem();
         if(itemRead == null)
             return;
-        if(items.remove(readItem())){
+        if(items.remove(itemRead)){
             System.out.println("Objecto eliminado exitosamente");
         } else {
             System.out.println("Objeto no encontrado");
@@ -102,6 +103,7 @@ public class ArrayListMenu {
 
     private static void removeByIndex() {
         System.out.println("Indique el índice del objeto a eliminar: ");
+        Scanner scanner = new Scanner(System.in);
         int indexToDelete = scanner.nextInt();
         try {
             System.out.println("Objeto " + items.remove(indexToDelete) + " eliminado exitosamente");
@@ -119,8 +121,8 @@ public class ArrayListMenu {
     }
     
     private static Object readItem() {
-        
         try {
+            Scanner scanner = new Scanner(System.in);
             Integer itemRead = scanner.nextInt();
             return itemRead;
         }catch(InputMismatchException e) {
@@ -129,8 +131,9 @@ public class ArrayListMenu {
         }
     }
     
-    private static Integer scannOption() {
+    private static Integer scanOption() {
         try {
+            Scanner scanner = new Scanner(System.in);
             return scanner.nextInt();
         }catch(InputMismatchException e) {
             return -1;
