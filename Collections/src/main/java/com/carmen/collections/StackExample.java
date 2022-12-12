@@ -12,60 +12,57 @@ import java.util.Stack;
  * @author carme
  */
 public class StackExample {
-    
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String expression = scanner.nextLine();
-        int result = performExpression(expression);
-    }
-
-    private static Integer performExpression(String expression) {
-        Stack operands = new Stack();
-        Stack operators = new Stack();
-        Stack parenthesis = new Stack();
-        Integer operand1;
-        Integer operand2;
-        Integer partialResult;
-        Integer result;
-        for(int i = 0; i < expression.length(); i++) {
-            Character ch = expression.charAt(i);
-            switch (ch) {
-                case '(':
-                    parenthesis.add(ch);
+    public static double evaluate(String expression) {
+        Stack<Double> operands = new Stack<>();
+        Stack<Character> operators = new Stack<>();
+        for (int i = 0; i < expression.length(); i++) {
+            Character character = expression.charAt(i);
+            try {
+                Double operand = Double.parseDouble(String.valueOf(character));
+                operands.push(operand);
+                continue;
+            } catch (NumberFormatException exception) {
+                //do nothing
+            }
+            switch (character) {
+                // si es cualquier operador, se ingresa a la pila
+                case '+' :
+                case '-' :
+                case '*' :
+                case '/' :
+                    operators.push(character);
                     break;
-                case ')':
-                    parenthesis.add(ch);
+                case '(' :
                     break;
-                case '+':
-                case '*':
-                case '/':
-                case '-':
-                    operators.add(ch);
-                    break;
-                case ')':
-                   operand1 = (Integer) operands.pop();
-                   operand2 = (Integer) operands.pop();
-                   result = perfomrOperation(operand1, operand2, (Character) operators.pop());
-                   operands.add(result);
-                default:
-                    operands.add(Integer.parseInt(ch));
+                case ')' :
+                    double operand2 = operands.pop();
+                    double operand1 = operands.pop();
+                    Character operator = operators.pop();
+                    switch (operator) {
+                        case '+' :
+                            operands.push(operand1 + operand2);
+                            break;
+                        case '-' :
+                            operands.push(operand1 - operand2);
+                            break;
+                        case '*' :
+                            operands.push(operand1 * operand2);
+                            break;
+                        case '/' :
+                            operands.push(operand1 / operand2);
+                            break;
+                    }
             }
         }
-        return (Integer) operands.pop();
+        // se regresa el ultimo operando, el cual tiene el resultado final
+        return operands.pop();
     }
-    
-    private static Integer perfomrOperation(Integer op1, Integer op2, Character operator){
-        switch (operator) {
-            case '+':
-                return op1 + op2;
-            case '-':
-                return op1 - op2;
-            case '*':
-                return op1 * op2;
-            case '/':
-                return op1 / op2;
-            default:
-                throw new IllegalArgumentException("Invalid operator");
-        }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingresa la expresion a evaluar:");
+        String inputStr = scanner.nextLine();
+        scanner.close();
+        System.out.println("Resultado: " + evaluate(inputStr));
     }
 }
